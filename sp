@@ -2,6 +2,7 @@
 
 import dbus
 import sys
+import time
 argv = sys.argv
 
 SP_DEST='org.mpris.MediaPlayer2.spotify'
@@ -50,14 +51,26 @@ if len(argv) == 2 and argv[1] != 'help':
             print(f'{key}|{value}')
     elif command == 'current':
         meta = get_metadata()
-        if len(meta) != 0:
+        if not meta:
+            time.sleep(1)
+            meta = get_metadata()
+        if not meta:
+            time.sleep(1)
+            meta = get_metadata()
+        if meta:
             print(f'Album       {meta["album"]}')
             print(f'AlbumArtist {meta["albumArtist"]}')
             print(f'Artist      {meta["artist"]}')
             print(f'Title       {meta["title"]}')
     elif command == 'current-oneline':
         meta = get_metadata()
-        if len(meta) != 0:
+        if not meta:
+            time.sleep(1)
+            meta = get_metadata()
+        if not meta:
+            time.sleep(1)
+            meta = get_metadata()
+        if len(meta):
             print(f'{meta["artist"]} | {meta["title"]}')
     elif command == 'status':
         print(props.Get(SP_MEMB, 'PlaybackStatus'))
