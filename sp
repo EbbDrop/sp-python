@@ -21,7 +21,7 @@ except dbus.exceptions.DBusException:
         inter = dbus.Interface(spotify, dbus_interface=SP_MEMB)
         props = dbus.Interface(spotify, dbus_interface='org.freedesktop.DBus.Properties')
     except dbus.exceptions.DBusException:
-        print('Could not connect with spotify or spotifyd')
+        print('Error: Could not connect with spotify or spotifyd')
         sys.exit()
 
 def get_metadata():
@@ -59,6 +59,8 @@ if len(argv) == 2 and argv[1] != 'help':
         meta = get_metadata()
         if len(meta) != 0:
             print(f'{meta["artist"]} | {meta["title"]}')
+    elif command == 'status':
+        print(props.Get(SP_MEMB, 'PlaybackStatus'))
     else:
         print(f'{command} is not a valid command. Use `sp help` fore more information.')
 else:
@@ -75,6 +77,7 @@ COMMAND:
     metadata         - Dump the current track's metadata
     current          - Format the currently playing track
     current-oneline  - prints `atrist | title`
+    status           - Prints Playing or Paused
 
     help      - Print this help message and exit
 """)
